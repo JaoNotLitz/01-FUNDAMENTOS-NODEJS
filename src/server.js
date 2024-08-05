@@ -1,39 +1,20 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js'
-import { Database } from './database.js'
-import { unsubscribe } from 'node:diagnostics_channel'
+import { routes } from './routes.js'
 
-const database = new Database()
 const server = http.createServer(async(req, res)=> {
     const { method, url} = req
-
-
+    
     await json(req,res)
     
-    if (method == 'GET'&& url == '/users'){ 
-        
-        const users = database.select('users')
-        
-        return res
-        .setHeader('Content-type', 'application/json')
-        .end(JSON.stringify(users))
-    }
+   const route = routes.find(route => {
+    return route.method == method && route.path == url
+   })
 
-    if (method == 'POST'&& url == '/users'){ 
+   console.log(route);
+   
 
-        const {name , email} = req.body
-
-        const user ={
-            id: 1,
-            name,
-            email
-        }
-
-        database.insert('users',users)
-
-        return res.writeHead(201).end()
-    }
-    return res.end('url invalida')
+    return res.writeHead(404).end()
 })
 
 server.listen(3333)
