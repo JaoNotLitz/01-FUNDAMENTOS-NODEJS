@@ -1,6 +1,7 @@
 
 import { Database } from "./database.js";
 import { randomUUID } from 'node:crypto'
+import { buildRoadPath } from "./utils/build-road-path.js";
 
 const database = new Database()
 
@@ -15,7 +16,7 @@ export const routes = [
     },
     {
         method: 'POST',
-        path: '/users',
+        path: buildRoadPath('/users'),
         handler: (req, res) => {
             
         const {name , email} = req.body
@@ -32,17 +33,18 @@ export const routes = [
         }
     },
     {
+        method: 'DELETE',
+        path: buildRoadPath('/users/:id'),
+        handler: (req, res) => {
+            return res.end()
+        }
+    },
+    {
         method: 'PUT',
         path: '/users',
         handler: (req, res) => {
             //CODE TO UPDATE
         }
     },
-    {
-        method: 'DELETE',
-        path: '/users',
-        handler: (req, res) => {
-            //CODE TO DELETE
-        }
-    },
+
 ]
